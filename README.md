@@ -49,7 +49,8 @@ If you use this work, please cite the associated publication:
 ## Contact
 For questions or collaborations, please contact:
 [SA Yoganathan]
+[Medical Physicist - Radiation Oncology]
 [Saint John Regional Hospital]
 [Saint John, New Brunswick, Canada]
-[sa.yoganathan@horizonnb.ca]
+
 
