@@ -37,8 +37,8 @@ for nn=1:3
     % ---------------------------------------------------------------
     % Validation data
     % ---------------------------------------------------------------
-    dstI = 'Y:\Syn_MRI\BRaTS 2021\MatData\Test\3D\Input';
-    dstO = 'Y:\Syn_MRI\BRaTS 2021\MatData\Test\3D\Response';
+    dstI = 'Y:\Syn_MRI\BRaTS 2021\MatData\Valid\3D\Input';
+    dstO = 'Y:\Syn_MRI\BRaTS 2021\MatData\Valid\3D\Response';
 
     imdsValInp = imageDatastore(dstI,'FileExtensions','.mat',...
         'ReadFcn',@(x) matReadValImg(x));
@@ -223,39 +223,7 @@ for nn=1:3
     save(fullfile(checkpointDir, fileName), ...
         'genX2Y', 'disc1', "disc2");
 end
-%% Testing
-while hasdata(mbqVal)
 
-% Read mini-batch of data
-[imX, imY] = next(mbqVal);
- % convert to single for faster trian - GPU
-tumorSeg = single(imX(:,:,:,2,:)); tumorSeg(tumorSeg > 0) = 1;
-imX = single(imX(:,:,:,1,:)); 
-imY = single(imY); 
-% convert to dlarray
-imX = dlarray(imX,'SSSCB');
-imY = dlarray(imY,'SSSCB');
-
-% Generate images using the generator
-genImage1 = GenerateFullDatafromPatch(imX, genX2Y1, patchSize); 
-genImage2 = GenerateFullDatafromPatch(imX, genX2Y2, patchSize); 
-% extract data
-imX = extractdata(gather(imX));
-imY = extractdata(gather(imY));
-
-% Make testing volumes 3-D
-imX = squeeze(imX);
-imY = squeeze(imY);
-
-genImage1 = squeeze(genImage1);
-
-figure; imshow3Dfull(imX);
-figure; imshow3Dfull(imY);
-figure; imshow3Dfull(genImage1);
-figure('Name','new'); imshow3Dfull(genImage2);
-
-close all
-end
 %% Suport functions
 % MatRead
 function data = matReadImg(filename)
