@@ -40,7 +40,7 @@ This research investigates synthetic MRI as a supplementary approach when acquir
 
 If you use this work, please cite the associated publication:
 
-*Tumour-Aware Synthesis of Multi-Contrast Brain MRI: Evaluation of Image Quality and Downstream Tumour Segmentation.*
+*Tumour-Aware Synthesis of Multi-Contrast Brain MRI: Image Quality and Tumour Segmentation Evaluation.*
 
 [Publication details to be added upon acceptance/publication.]
 
