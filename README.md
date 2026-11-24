@@ -1,159 +1,48 @@
-# Synthetic-MRI
-Dual-scale 2.5D conditional GAN for multi-contrast brain MRI synthesis. Generates T1-CE, T2, and FLAIR images from T1 MRI, reducing scan time, contrast agent use, and motion artifacts in radiotherapy imaging.
+# Tumour-Aware Synthesis of Multi-Contrast Brain MRI
 
 ## Overview
-This project implements a deep learning framework for generating synthetic multi-contrast brain MRI from a single T1-weighted image. The model synthesizes the following MRI contrasts:
 
-- T1 contrast-enhanced (T1-CE)
-- T2-weighted MRI
-- T2-FLAIR MRI
-- 
-The framework is based on a conditional Generative Adversarial Network (cGAN) with dual-scale discriminators and a 2.5D input strategy that incorporates neighbouring slices to improve volumetric consistency.
+This repository contains the implementation of a tumour-aware 3D conditional generative adversarial network (cGAN) for synthesizing multi-contrast brain MRI, including T1-CE, T2, and T2-FLAIR.
 
-The primary goal is to reduce MRI scan time, decrease reliance on gadolinium-based contrast agents, and mitigate motion artifacts in brain radiotherapy workflows.
+The framework investigates the effect of incorporating complementary MRI contrasts on synthesis quality and preservation of tumour-related information.
 
----
+## Methodology
 
-## Key Features
+The proposed framework includes:
 
-- Dual-scale GAN architecture capturing local and global anatomical features
-- 2.5D slice-based synthesis using neighbouring slice context
-- Hybrid loss function combining:
-  - Adversarial loss
-  - Feature matching loss
-  - Perceptual loss
-  - 3D volumetric consistency loss
-- Evaluation using both image similarity metrics and tumour segmentation performance
-- Designed for radiotherapy planning applications
+- An attention-enhanced 3D U-Net generator with a Swin Transformer bottleneck.
+- Dual-scale 3D PatchGAN discriminators.
+- Tumour-aware patch sampling and tumour-weighted reconstruction loss.
+- Volumetric structural consistency using 3D SSIM.
+- Single-input (T1-only) and multi-input synthesis configurations.
 
----
+## Evaluation
+
+The framework was evaluated using:
+
+- **Image quality:** Structural Similarity Index (SSIM) and Peak Signal-to-Noise Ratio (PSNR).
+- **Downstream tumour segmentation:** Dice similarity coefficient and Hausdorff distance.
+- **Contrast replacement:** Evaluation of selectively replacing acquired MRI contrasts with their synthetic counterparts.
+- **Clinical domain adaptation:** Fine-tuning and evaluation using an independent brain radiotherapy MRI dataset.
 
 ## Dataset
 
-### Public Dataset
-BraTS 2021 dataset
+- **BraTS 2021:** Public brain tumour MRI dataset.
+- **Clinical dataset:** An independent, anonymized brain radiotherapy MRI cohort.
 
-Training: 1000 cases  
-Validation: 100 cases  
-Testing: 100 cases  
+Clinical data are not publicly distributed due to privacy and institutional restrictions.
 
-Each case includes:
-- T1-weighted MRI
-- T1 contrast-enhanced MRI
-- T2-weighted MRI
-- T2-FLAIR MRI
-- Tumour segmentation masks
+## Intended Use
 
-### Clinical Dataset
-Independent brain radiotherapy dataset
-
-Training (fine-tuning): 20 cases  
-Testing: 10 cases  
-
-MRI scans include:
-- T1
-- T1-CE
-- T2
-- T2-FLAIR
-
-All images were preprocessed with:
-- Denoising
-- Bias field correction
-- Rigid registration
-- Resampling to 1×1×1 mm resolution
-
----
-
-## Model Architecture
-
-### Generator
-Encoder–decoder architecture inspired by pix2pixHD with attention modules.
-
-Input:
-- T1 slice with neighbouring slices (2.5D input)
-
-Output:
-- Synthetic MRI contrast (T1-CE / T2 / T2-FLAIR)
-
-### Discriminators
-Two discriminators operate at different spatial scales:
-
-1. Full-resolution discriminator
-2. Half-resolution discriminator (0.5×)
-
-These ensure both fine texture realism and global anatomical consistency.
-
----
-
-## Training Strategy
-
-The generator is trained using a hybrid loss function:
-
-L_G = λ1 AL_2D + λ2 FML_2D + λ3 PL_2D + λ4 MAE_2.5D + λ5 AL_2.5D
-
-Where:
-
-AL = adversarial loss  
-FML = feature matching loss  
-PL = perceptual loss  
-MAE = mean absolute error on reconstructed volume  
-
-Loss weights:
-
-λ1 = 1  
-λ2 = 5  
-λ3 = 5  
-λ4 = 5  
-λ5 = 5  
-
----
-
-## Evaluation Metrics
-
-Synthetic MRI quality was evaluated using:
-
-- Structural Similarity Index (SSIM)
-- Peak Signal-to-Noise Ratio (PSNR)
-
-Clinical utility was assessed using tumour segmentation metrics:
-
-- Dice Similarity Coefficient
-- Hausdorff Distance
-
----
-
-## Clinical Validation
-
-The synthetic MRI images were tested for tumour segmentation performance using a 3D segmentation model.
-
-Experiments included:
-
-1. Using all original MRI contrasts
-2. Replacing individual contrasts with synthetic images
-3. Using fully synthetic MRI contrasts
-
-Results showed that synthetic MRI can effectively supplement missing contrasts, particularly for whole tumour segmentation.
-
-
----
-
-## Applications
-
-- Brain radiotherapy planning
-- MRI protocol acceleration
-- Contrast-agent reduction
-- Motion artifact mitigation
-- Data augmentation for medical imaging models
-
----
+This research investigates synthetic MRI as a supplementary approach when acquired MRI contrasts are unavailable or incomplete. Synthetic images are intended to complement, not replace, acquired MRI or established clinical assessment.
 
 ## Citation
 
-If you use this work, please cite:
+If you use this work, please cite the associated publication:
 
-Multi-Contrast Brain MRI Synthesis for Radiotherapy Using a Dual-Scale Generative Adversarial Network with Volumetric Context
+*Tumour-Aware Synthesis of Multi-Contrast Brain MRI: Evaluation of Image Quality and Downstream Tumour Segmentation.*
 
----
+[Publication details to be added upon acceptance/publication.]
 
 
 
